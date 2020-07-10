@@ -81,6 +81,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         nilearn\
         mne\
         numba\
+	nilearn\
         &&\
 # ------------------------------------------------------------------
 # pytorch
@@ -94,13 +95,13 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         typing \
         && \
     $PIP_INSTALL \
-        torch -f https://download.pytorch.org/whl/nightly/cu100/torch.html \
+        torch===1.5.1 torchvision===0.6.1 -f https://download.pytorch.org/whl/torch_stable.html \
+	torchtext \
         && \
 # ==================================================================
-# tensorboradx and torchvision
+# tensorboradx 
 # ------------------------------------------------------------------      
     $PIP_INSTALL \
-        torchvision\
         tensorboardx\
         && \
 # ==================================================================
