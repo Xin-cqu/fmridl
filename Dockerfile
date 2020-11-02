@@ -12,7 +12,7 @@
 # Nilearn       latest (pip)
 # ---------------------------------
 
-FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04 as base
+FROM nvidia/cuda:11.1-cudnn8-devel-ubuntu18.04 as base
 LABEL maintainer="nclxwen@gmail.com"
 # =================================================================
 # set evn
@@ -43,10 +43,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # python
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        pip \
         setuptools \
-        && \
-    $PIP_INSTALL \
         numpy \
         scipy \
         pandas \
@@ -80,7 +77,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         typing \
         && \
     $PIP_INSTALL \
-        torch===1.5.1 torchvision===0.6.1 -f https://download.pytorch.org/whl/torch_stable.html \
+        torch==1.7.0+cu110 torchvision==0.8.1+cu110 torchaudio===0.7.0 -f https://download.pytorch.org/whl/torch_stable.html \
 	torchtext \
         && \
 # ==================================================================
@@ -93,7 +90,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # Autogluon 
 # ------------------------------------------------------------------      
     $PIP_INSTALL \
-        mxnet-cu100\
+        mxnet-cu110\
         autogluon\
         && \
 # ==================================================================
