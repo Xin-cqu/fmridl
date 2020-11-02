@@ -28,7 +28,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # ==================================================================
 # tools
 # ------------------------------------------------------------------
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
+    $APT_INSTALL \
         build-essential \
         apt-utils \
         ca-certificates \
@@ -37,11 +37,11 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         wget \
         git \
         vim \
+        python3.9 \
         && \
 # ==================================================================
 # python
 # ------------------------------------------------------------------
-    $APT_INSTALL python3.9 \
     $PIP_INSTALL \
         pip \
         setuptools \
