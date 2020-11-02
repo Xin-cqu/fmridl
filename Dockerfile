@@ -1,5 +1,5 @@
 # =================================
-# cuda          11.0
+# cuda          10.1
 # cudnn         v7
 # ---------------------------------
 # python        3.7
@@ -12,13 +12,12 @@
 # Nilearn       latest (pip)
 # ---------------------------------
 
-FROM pytorch/pytorch as base
+FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04 as base
 LABEL maintainer="nclxwen@gmail.com"
 # =================================================================
 # set evn
 # -----------------------------------------------------------------
 RUN apt-get update
-
 RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     PIP_INSTALL="python -m pip --no-cache-dir install --upgrade" && \
     GIT_CLONE="git clone --depth 10" && \
@@ -27,9 +26,53 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
            /etc/apt/sources.list.d/nvidia-ml.list && \
     apt-get update && \
 # ==================================================================
+# tools
+# ------------------------------------------------------------------
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
+        build-essential \
+        apt-utils \
+        ca-certificates \
+        cmake \
+        curl \
+        wget \
+        git \
+        vim \
+        && \
+# ==================================================================
+# python
+# ------------------------------------------------------------------
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
+        software-properties-common \
+        && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
+        python3.7 \
+        python3.7-dev \
+        python3-distutils-extra \
+        && \
+    wget -O ~/get-pip.py \
+        https://bootstrap.pypa.io/get-pip.py && \
+    python3.7 ~/get-pip.py && \
+    ln -s /usr/bin/python3.7 /usr/local/bin/python3 && \
+    ln -s /usr/bin/python3.7 /usr/local/bin/python && \
+    $PIP_INSTALL \
+        pip \
+        setuptools \
+        && \
+    $PIP_INSTALL \
+        numpy \
+        scipy \
+        pandas \
+        cloudpickle \
+        scikit-learn \
+        matplotlib \
+        Cython \
+        && \
+# ==================================================================
 # jupyter
 # ------------------------------------------------------------------
-  $PIP_INSTALL \
+    $PIP_INSTALL \
         jupyter \
         && \
 # some tools I used
@@ -39,18 +82,33 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         mne\
         numba\
         &&\
-# ==================================================================
-# tensorboradx 
-# ------------------------------------------------------------------      
+# ------------------------------------------------------------------
+# Mxnet
+# ------------------------------------------------------------------
     $PIP_INSTALL \
-        tensorboardx\
-	    && \
-# ==================================================================
-# Autogluon 
-# ------------------------------------------------------------------      
-    $PIP_INSTALL \
-        mxnet-cu110\
+        mxnet-cu101\
         autogluon\
+        &&\
+# ------------------------------------------------------------------
+# pytorch
+# ------------------------------------------------------------------
+    $PIP_INSTALL \
+        future \
+        numpy \
+        protobuf \
+        enum34 \
+        pyyaml \
+        typing \
+        && \
+    $PIP_INSTALL \
+        torch==1.7.0+cu101 torchvision==0.8.1+cu101 torchaudio===0.7.0 -f https://download.pytorch.org/whl/torch_stable.html \
+        && \
+# ==================================================================
+# tensorboradx and torchvision
+# ------------------------------------------------------------------      
+    $PIP_INSTALL \
+        torchvision\
+        tensorboardx\
         && \
 # ==================================================================
 # config & cleanup
