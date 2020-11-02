@@ -81,7 +81,6 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         nilearn\
         mne\
         numba\
-	nilearn\
         &&\
 # ------------------------------------------------------------------
 # pytorch
@@ -103,6 +102,13 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # ------------------------------------------------------------------      
     $PIP_INSTALL \
         tensorboardx\
+        && \
+# ==================================================================
+# Autogluon 
+# ------------------------------------------------------------------      
+    $PIP_INSTALL \
+        mxnet-cu100\
+        autoglun\
         && \
 # ==================================================================
 # config & cleanup
