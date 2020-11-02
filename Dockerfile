@@ -2,7 +2,7 @@
 # cuda          10.0
 # cudnn         v7
 # ---------------------------------
-# python        3.6
+# python        3.9
 # anaconda      5.2.0
 # Jupyter       5.1 @:8888
 # tensorboard   latest (pip) @:6006
@@ -37,7 +37,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         wget \
         git \
         vim \
-        python3.9 \
+        python \
         && \
 # ==================================================================
 # python
